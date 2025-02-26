@@ -1,0 +1,470 @@
+body {
+    font-family: "Nunito", serif;
+    font-optical-sizing: auto;
+    font-weight: weight;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar (колонка с чатами) */
+.sidebar {
+    width: 200px;
+    background-color: #ddd;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 20px;
+    color: #555;
+}
+
+.sidebar button#createChatButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar button#createChatButton:hover {
+    background-color: #3e8e41;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar li:hover {
+    background-color: #ccc;
+}
+
+.sidebar li.active {
+    background-color: #ccc;
+    font-weight: bold;
+}
+
+/* Main Content (Сообщения и ввод) */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background-color: #f0f0f0;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.chat-info {
+    display: flex;
+    align-items: center;
+}
+
+.chat-info i {
+    margin-right: 10px;
+    font-size: 24px;
+    color: #555;
+}
+
+#chatName {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+}
+
+.chat-actions i {
+    margin-left: 20px;
+    font-size: 24px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.chat-actions i:hover {
+    color: #333;
+}
+
+.messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.message {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    max-width: 70%;
+    word-break: break-word;
+}
+
+.user-message {
+    background-color: #DCF8C6;
+    align-self: flex-end;
+}
+
+.system-message {
+    background-color: #FAFAFA;
+    color: #777;
+    text-align: center;
+    font-style: italic;
+}
+
+/* Input Area */
+.input-area {
+    padding: 15px;
+    background-color: #eee;
+    display: flex;
+    border-top: 1px solid #ccc;
+    align-items: center;
+}
+
+.input-buttons {
+    display: flex;
+    margin-right: 10px;
+}
+
+.input-buttons button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #555;
+    margin-right: 5px;
+    transition: color 0.2s ease;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.input-buttons button:hover {
+    color: #333;
+    background-color: #ddd;
+}
+
+.input-area input {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.input-area button#sendButton {
+    padding: 12px 25px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+}
+
+.input-area button#sendButton:hover {
+    background-color: #3e8e41;
+}
+
+/* Profile Sidebar */
+.profile-sidebar {
+    width: 250px;
+    background-color: #f8f8f8;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    object-fit: cover;
+    border: 3px solid #ddd;
+}
+
+.profile-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.profile-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-menu li {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.2s ease;
+}
+
+.profile-menu a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.profile-menu i {
+    margin-right: 10px;
+    font-size: 18px;
+    color: #555;
+}
+
+.profile-menu a:hover {
+    background-color: #eee;
+    color: #000;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.profile-data {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.profile-data p {
+    margin-bottom: 10px;
+}
+
+.profile-data strong {
+    font-weight: bold;
+}
+
+.settings-options {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.settings-options p {
+    margin-bottom: 10px;
+}
+
+.settings-options strong {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.settings-options select,
+.settings-options input[type="checkbox"] {
+    margin-left: 5px;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+/* Features list styles */
+.features-list {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.features-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.features-list li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+.features-list i {
+    margin-right: 10px;
+    font-size: 18px;
+    color: #4CAF50;
+}
+
+/* Dropdown styles */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+    min-width: 160px;
+    display: none;
+}
+
+.dropdown-menu a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #ddd;
+}
+
+/* Добавляем класс для отображения меню */
+.dropdown.show .dropdown-menu {
+    display: block;
+}
+
+/* Стили модального окна создания чата */
+#createChatModal .modal-content {
+    text-align: center; /* Центрируем контент в модальном окне */
+}
+
+#createChatModal input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#createChatModal button#confirmCreateChat {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+}
+
+#createChatModal button#confirmCreateChat:hover {
+    background-color: #3e8e41;
+}
+
+/* Стили для кнопок выбора типа чата */
+.chat-type-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.chat-type-buttons button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 16px;
+    margin: 0 5px;
+    transition: background-color 0.2s ease;
+}
+
+.chat-type-buttons button:hover {
+    background-color: #ddd;
+}
+
+/* Стили для отображения файлов и изображений в сообщениях */
+.message img,
+.message .file-link {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.message .file-link {
+    display: block;
+    padding: 10px;
+    background-color: #eee;
+    color: #333;
+    text-decoration: none;
+}
+
+.message .file-link:hover {
+    background-color: #ddd;
+}

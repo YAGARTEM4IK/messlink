@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мессенджер</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="sidebar">
+            <h2>Чаты</h2>
+            <button id="createChatButton"><i class="fas fa-plus-circle"></i> Создать чат</button>
+            <ul id="chatList">
+                <li data-chat-id="1" class="active">Чат 1</li>
+                <li data-chat-id="2">Чат 2</li>
+                <li data-chat-id="3">Чат 3</li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div class="chat-header">
+                <div class="chat-info">
+                    <i class="fas fa-comments"></i>
+                    <span id="chatName">Чат 1</span>
+                </div>
+                <div class="chat-actions">
+                    <i class="fas fa-phone"></i>
+                    <i class="fas fa-video"></i>
+                    <div class="dropdown">  <!-- Обертка для кнопки и меню -->
+                        <i class="fas fa-ellipsis-vertical dropdown-toggle"></i>
+                        <div class="dropdown-menu">
+                            <a href="#">Информация о чате</a>
+                            <a href="#">Заглушить уведомления</a>
+                            <a href="#" id="deleteChatLink">Удалить чат</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="messages" id="messages">
+                <!-- Здесь будут отображаться сообщения -->
+            </div>
+
+            <div class="input-area">
+                <div class="input-buttons">  <!-- Контейнер для кнопок -->
+                    <button id="addPhotoButton"><i class="fas fa-image"></i></button>
+                    <button id="addFileButton"><i class="fas fa-file"></i></button>
+                </div>
+                <input type="text" id="messageInput" placeholder="Введите сообщение...">
+                <button id="sendButton">Отправить</button>
+            </div>
+        </div>
+
+        <div class="profile-sidebar">
+            <div class="profile-header">
+                <img src="" alt="Фото профиля" class="profile-image">
+                <h3>Тёма Клочков</h3>  <!-- Здесь будет имя пользователя -->
+            </div>
+            <ul class="profile-menu">
+                <li><a href="#"><i class="fas fa-user"></i> Основные данные</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Настройки</a></li>
+                <li><a href="#"><i class="fas fa-star"></i> Возможности</a></li>
+                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Выйти</a></li>  <!-- Добавим иконку выхода -->
+            </ul>
+        </div>
+
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Основные данные</h2>
+            <div class="profile-data">
+                <p><strong>Имя:</strong> Тёма Клочков</p>
+                <p><strong>Email:</strong> example@example.com</p>
+                <p><strong>Телефон:</strong> +7 (123) 456-78-90</p>
+                <p><strong>Город:</strong> Москва</p>
+                <!-- Добавьте больше данных по необходимости -->
+            </div>
+        </div>
+    </div>
+
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Настройки</h2>
+            <div class="settings-options">
+                <p><strong>Тема:</strong>
+                    <select id="theme-select">
+                        <option value="light">Светлая</option>
+                        <option value="dark">Темная</option>
+                    </select>
+                </p>
+                <p><strong>Уведомления:</strong>
+                    <input type="checkbox" id="notifications-checkbox" checked> Включены
+                </p>
+                <p><strong>Язык:</strong>
+                    <select id="language-select">
+                        <option value="ru">Русский</option>
+                        <option value="en">English</option>
+                    </select>
+                </p>
+                <!-- Добавьте больше настроек по необходимости -->
+            </div>
+        </div>
+    </div>
+
+    <div id="featuresModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Возможности мессенджера</h2>
+            <div class="features-list">
+                <ul>
+                    <li><i class="fas fa-comment-dots"></i> Обмен текстовыми сообщениями</li>
+                    <li><i class="fas fa-images"></i> Отправка изображений</li>
+                    <li><i class="fas fa-file-alt"></i> Обмен файлами</li>
+                    <li><i class="fas fa-video"></i> Видеозвонки</li>
+                    <li><i class="fas fa-phone"></i> Голосовые звонки</li>
+                    <li><i class="fas fa-users"></i> Создание групповых чатов</li>
+                    <li><i class="fas fa-bell"></i> Уведомления о новых сообщениях</li>
+                    <li><i class="fas fa-lock"></i> Сквозное шифрование (опционально)</li>
+                    <!-- Добавьте больше возможностей по необходимости -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="createChatModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Создать чат</h2>
+            <div class="chat-type-buttons">
+                <button id="createPersonalChatButton">Личный чат</button>
+                <button id="createGroupChatButtonInModal">Групповой чат</button>
+            </div>
+            <input type="text" id="newChatNameInput" placeholder="Название чата">
+            <button id="confirmCreateChat">Создать</button>
+        </div>
+    </div>
+
+    <div id="chatInfoModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Информация о чате</h2>
+            <div id="chatInfoContent">
+                <!-- Здесь будет отображаться информация о чате -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
