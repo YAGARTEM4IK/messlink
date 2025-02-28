@@ -18,9 +18,15 @@
             <h2>Чаты</h2>
             <button id="createChatButton"><i class="fas fa-plus-circle"></i> Создать чат</button>
             <ul id="chatList">
-                <li data-chat-id="1" class="active">Чат 1</li>
-                <li data-chat-id="2">Чат 2</li>
-                <li data-chat-id="3">Чат 3</li>
+                <li data-chat-id="1" class="active">
+                    Чат 1 <i class="fas fa-bell-slash muted-icon" data-chat-id="1" style="display: none;"></i>
+                </li>
+                <li data-chat-id="2">
+                    Чат 2 <i class="fas fa-bell-slash muted-icon" data-chat-id="2" style="display: none;"></i>
+                </li>
+                <li data-chat-id="3">
+                    Чат 3 <i class="fas fa-bell-slash muted-icon" data-chat-id="3" style="display: none;"></i>
+                </li>
             </ul>
         </div>
 
@@ -33,11 +39,13 @@
                 <div class="chat-actions">
                     <i class="fas fa-phone"></i>
                     <i class="fas fa-video"></i>
-                    <div class="dropdown">  <!-- Обертка для кнопки и меню -->
+                    <div class="dropdown">
                         <i class="fas fa-ellipsis-vertical dropdown-toggle"></i>
                         <div class="dropdown-menu">
-                            <a href="#">Информация о чате</a>
-                            <a href="#">Заглушить уведомления</a>
+                            <a href="#" id="chatInfoLink">Информация о чате</a>
+                            <a href="#" id="muteChatLink">
+                                <span id="muteText">Заглушить уведомления</span>
+                            </a>
                             <a href="#" id="deleteChatLink">Удалить чат</a>
                         </div>
                     </div>
@@ -49,8 +57,8 @@
             </div>
 
             <div class="input-area">
-                <div class="input-buttons">  <!-- Контейнер для кнопок -->
-                    <button id="addPhotoButton"><i class="fas fa-image"></i></button>
+                <div class="input-buttons">
+                    <button id="emojiButton"><i class="far fa-smile"></i></button>
                     <button id="addFileButton"><i class="fas fa-file"></i></button>
                 </div>
                 <input type="text" id="messageInput" placeholder="Введите сообщение...">
@@ -61,13 +69,13 @@
         <div class="profile-sidebar">
             <div class="profile-header">
                 <img src="" alt="Фото профиля" class="profile-image">
-                <h3>Тёма Клочков</h3>  <!-- Здесь будет имя пользователя -->
+                <h3>Тёма Клочков</h3>
             </div>
             <ul class="profile-menu">
                 <li><a href="#"><i class="fas fa-user"></i> Основные данные</a></li>
                 <li><a href="#"><i class="fas fa-cog"></i> Настройки</a></li>
                 <li><a href="#"><i class="fas fa-star"></i> Возможности</a></li>
-                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Выйти</a></li>  <!-- Добавим иконку выхода -->
+                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Выйти</a></li>
             </ul>
         </div>
 
@@ -82,7 +90,6 @@
                 <p><strong>Email:</strong> example@example.com</p>
                 <p><strong>Телефон:</strong> +7 (123) 456-78-90</p>
                 <p><strong>Город:</strong> Москва</p>
-                <!-- Добавьте больше данных по необходимости -->
             </div>
         </div>
     </div>
@@ -107,7 +114,6 @@
                         <option value="en">English</option>
                     </select>
                 </p>
-                <!-- Добавьте больше настроек по необходимости -->
             </div>
         </div>
     </div>
@@ -126,7 +132,6 @@
                     <li><i class="fas fa-users"></i> Создание групповых чатов</li>
                     <li><i class="fas fa-bell"></i> Уведомления о новых сообщениях</li>
                     <li><i class="fas fa-lock"></i> Сквозное шифрование (опционально)</li>
-                    <!-- Добавьте больше возможностей по необходимости -->
                 </ul>
             </div>
         </div>
@@ -150,11 +155,18 @@
             <span class="close">&times;</span>
             <h2>Информация о чате</h2>
             <div id="chatInfoContent">
-                <!-- Здесь будет отображаться информация о чате -->
             </div>
+        </div>
+    </div>
+
+    <div id="emojiPanel" class="emoji-panel" style="display: none;">
+        <div class="emoji-grid">
+            <!-- Смайлики будут здесь -->
         </div>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
+
+    <!-- v.0.2 -->
