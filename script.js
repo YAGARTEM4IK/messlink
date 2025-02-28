@@ -19,7 +19,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let currentChatId = 1;
     let chatIdCounter = 4;
-    let chatType = "personal"; // Тип чата по умолчанию
+    let chatType = "personal";
+
+    // Переменные для заглушения уведомлений
+    let isMuted = false;
+
+    // Массив со смайликами (можно расширить)
+    const emojis = [
+        '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰',
+        '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩', '🥳', '😏',
+        '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '🥺', '😢', '😭', '😤', '😠',
+        '😡', '🤬', '🤯', '😳', '🥵', '🥶', '😱', '😨', '😰', '😥', '😓', '🫣', '🤗', '🫣', '🤔', '🫡',
+        '🤫', '🤭', '🫣', '🤡', '🤥', '🥱', '😴', '🤤', '😵', '🥴', '🤢', '🤮', '🤧', '🤕', '🤒', '🤕',
+        '👻', '👽', '👾', '🤖', '🎃', '🙈', '🙉', '🙊', '💋', '💌', '💘', '💝', '💖', '💗', '💓', '💞',
+        '💕', '💖', '❣', '💔', '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💯', '💢', '💥',
+        '💫', '💦', '💨', '🕳️', '✨', '🌟', '💫', '💬', '👁️‍🗨️', '💭', '💡', '💯', '✅', '❤️', '👍',
+    ];
 
     function displayMessages() {
         messagesContainer.innerHTML = '';
@@ -35,19 +50,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 messageElement.classList.add('system-message');
             }
 
-            // Обработка текстовых сообщений
             if (message.text) {
                 messageElement.textContent = message.text;
             }
 
-            // Обработка изображений
             if (message.image) {
                 const imgElement = document.createElement('img');
                 imgElement.src = message.image;
                 messageElement.appendChild(imgElement);
             }
 
-            // Обработка файлов
             if (message.file) {
                 const fileLink = document.createElement('a');
                 fileLink.href = URL.createObjectURL(message.file);
@@ -66,6 +78,28 @@ document.addEventListener('DOMContentLoaded', function() {
     function addMessage(text, sender = "user") {
         chatMessages[currentChatId].push({ text: text, sender: sender });
         displayMessages();
+        // Здесь добавим логику для уведомлений, если они не заглушены
+        if (!isMuted) {
+            // Показываем уведомление (например, с использованием API Notification)
+            showNotification(`Новое сообщение в чате ${chatNameElement.textContent}`);
+        }
+    }
+
+    function showNotification(message) {
+        if (!("Notification" in window)) {
+            alert(message); // Fallback для браузеров, не поддерживающих Notification API
+            return;
+        }
+
+        if (Notification.permission === "granted") {
+            new Notification(message);
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(function (permission) {
+                if (permission === "granted") {
+                    new Notification(message);
+                }
+            });
+        }
     }
 
     function addImageMessage(dataURL) {
@@ -111,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             chatItem.classList.add('active');
             currentChatId = chatId;
             displayMessages();
+            loadMuteState(); // Загружаем состояние при смене чата
 
             chatNameElement.textContent = chatItem.textContent;
         }
@@ -177,27 +212,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    const addPhotoButton = document.getElementById('addPhotoButton');
     const addFileButton = document.getElementById('addFileButton');
-
-    if (addPhotoButton && addFileButton) {
-        addPhotoButton.addEventListener('click', function() {
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = 'image/*';
-            fileInput.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        addImageMessage(e.target.result);
-                    }
-                    reader.readAsDataURL(file); // Читаем файл как Data URL
-                }
-            });
-            fileInput.click();
-        });
-
+    if (addFileButton) {
         addFileButton.addEventListener('click', function() {
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
@@ -212,39 +228,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (newChatNameInput && confirmCreateChat && chatList) {
-
         confirmCreateChat.addEventListener('click', function() {
             const newChatName = newChatNameInput.value.trim();
             if (newChatName !== '') {
-                // Создаем новый элемент списка чатов
                 const newChatItem = document.createElement('li');
                 newChatItem.dataset.chatId = chatIdCounter;
                 newChatItem.textContent = newChatName;
+                newChatItem.innerHTML += `<i class="fas fa-bell-slash muted-icon" data-chat-id="${chatIdCounter}" style="display: none;"></i>`; // Добавляем иконку для нового чата
 
-                // Добавляем чат в список
                 chatList.appendChild(newChatItem);
 
-                // Снимаем класс active с текущего активного элемента
                 const activeChat = chatList.querySelector('.active');
                 if (activeChat) {
                     activeChat.classList.remove('active');
                 }
 
-                // Делаем новый чат активным
                 newChatItem.classList.add('active');
 
-                // Обновляем currentChatId и отображаем сообщения для нового чата
                 currentChatId = chatIdCounter;
-                chatMessages[currentChatId] = [];  // Создаем пустой массив сообщений для нового чата
+                chatMessages[currentChatId] = [];
                 displayMessages();
+                loadMuteState();
 
-                // Обновляем имя чата в header
                 chatNameElement.textContent = newChatName;
 
-                // Увеличиваем счетчик ID для следующего чата
                 chatIdCounter++;
 
-                // Закрываем модальное окно и очищаем поле ввода
                 createChatModal.style.display = "none";
                 newChatNameInput.value = '';
             }
@@ -263,104 +272,171 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Получаем ссылку "Информация о чате"
-        const chatInfoLink = dropdownMenu.querySelector('a[href="#"]');
+        const chatInfoLink = document.getElementById('chatInfoLink');
         if (chatInfoLink) {
             chatInfoLink.addEventListener('click', function(event) {
                 event.preventDefault();
-
-                // Отображаем информацию о чате
                 displayChatInfo();
-
-                // Показываем модальное окно
                 chatInfoModal.style.display = "block";
-
-                // Закрываем выпадающее меню
                 dropdown.classList.remove('show');
             });
         }
 
-        const deleteChatLink = document.getElementById('deleteChatLink'); // Получаем ссылку "Удалить чат"
-            if (deleteChatLink) {
-                deleteChatLink.addEventListener('click', function(event) {
-                    event.preventDefault(); // Предотвращаем переход по ссылке
+        const muteChatLink = document.getElementById('muteChatLink');
+        if (muteChatLink) {
+            muteChatLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                toggleMute();
+                dropdown.classList.remove('show');
+            });
+        }
 
-                    // Удаляем чат
-                    deleteChat();
-
-                    // Закрываем выпадающее меню
-                    dropdown.classList.remove('show');
-                });
-            }
+        const deleteChatLink = document.getElementById('deleteChatLink');
+        if (deleteChatLink) {
+            deleteChatLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                deleteChat();
+                dropdown.classList.remove('show');
+            });
+        }
     }
 
-    // Функция для отображения информации о чате
     function displayChatInfo() {
         let chatInfo = "";
-
-        //  В зависимости от текущего chatID, отображаем разную информацию
         if (currentChatId === 1) {
             chatInfo = "<p><strong>Название:</strong> Чат 1</p><p><strong>Тип:</strong> Личный чат</p><p><strong>Участники:</strong> Тёма Клочков, Пользователь 1</p>";
         } else if (currentChatId === 2) {
             chatInfo = "<p><strong>Название:</strong> Чат 2</p><p><strong>Тип:</strong> Личный чат</p><p><strong>Участники:</strong> Тёма Клочков, Пользователь 2</p>";
         } else if (currentChatId === 3) {
             chatInfo = "<p><strong>Название:</strong> Чат 3</p><p><strong>Тип:</strong> Личный чат</p><p><strong>Участники:</strong> Тёма Клочков, Пользователь 3</p>";
-        } else { // Для динамически созданных чатов
-            const chatName = document.querySelector(`#chatList li[data-chat-id="${currentChatId}"]`).textContent; // Получаем имя чата
-
-            chatInfo = `<p><strong>Название:</strong> ${chatName}</p><p><strong>Тип:</strong> Групповой чат</p><p><strong>Участники:</strong> Тёма Клочков (Вы)</p>`;  // Базовая информация
+        } else {
+            const chatName = document.querySelector(`#chatList li[data-chat-id="${currentChatId}"]`).textContent;
+            chatInfo = `<p><strong>Название:</strong> ${chatName}</p><p><strong>Тип:</strong> Групповой чат</p><p><strong>Участники:</strong> Тёма Клочков (Вы)</p>`;
         }
 
         chatInfoContent.innerHTML = chatInfo;
     }
 
     function deleteChat() {
-            // Получаем элемент чата из списка
-            const chatItem = document.querySelector(`#chatList li[data-chat-id="${currentChatId}"]`);
+        const chatItem = document.querySelector(`#chatList li[data-chat-id="${currentChatId}"]`);
+        if (chatItem) {
+            chatItem.remove();
+            delete chatMessages[currentChatId];
 
-            if (chatItem) {
-                // Удаляем элемент из списка
-                chatItem.remove();
+            const chatListItems = document.querySelectorAll('#chatList li');
+            if (chatListItems.length > 0) {
+                currentChatId = parseInt(chatListItems[0].dataset.chatId);
+                chatListItems[0].classList.add('active');
+                chatNameElement.textContent = chatListItems[0].textContent;
+                loadMuteState();
+            } else {
+                currentChatId = null;
+                chatNameElement.textContent = "";
+            }
+            displayMessages();
+        }
+    }
 
-                // Удаляем сообщения из объекта chatMessages
-                delete chatMessages[currentChatId];
+    function toggleMute() {
+        isMuted = !isMuted;
+        const mutedIcon = document.querySelector(`.sidebar li[data-chat-id="${currentChatId}"] .muted-icon`);
+        const muteChatLink = document.getElementById('muteChatLink');
+        const muteText = document.getElementById('muteText');
 
-                // Если есть другие чаты, делаем активным первый из них
-                const chatListItems = document.querySelectorAll('#chatList li');
-                if (chatListItems.length > 0) {
-                    currentChatId = parseInt(chatListItems[0].dataset.chatId); // Получаем ID первого чата
-
-                    chatListItems[0].classList.add('active');  // Делаем первый чат активным
-                    chatNameElement.textContent = chatListItems[0].textContent; // Обновляем имя текущего чата
-                }
-                else {
-                    // Если чатов больше нет
-                    currentChatId = null;  // Сбрасываем currentChatId
-                    chatNameElement.textContent = "";  // Очищаем заголовок чата
-                }
-                // Отображаем сообщения для нового активного чата
-                displayMessages();
+        if (muteChatLink && muteText) {
+            if (isMuted) {
+                muteText.textContent = "Включить уведомления";
+                mutedIcon.style.display = 'inline'; // Показываем иконку
+            } else {
+                muteText.textContent = "Заглушить уведомления";
+                mutedIcon.style.display = 'none'; // Скрываем иконку
             }
         }
+        localStorage.setItem(`chat_${currentChatId}_muted`, isMuted);
+        console.log(`Уведомления для чата ${currentChatId} ${isMuted ? 'заглушены' : 'включены'}`);
+    }
 
-    // Добавим закрытие модальных окон по клику на крестик
-        closeModalButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                const modal = button.closest('.modal');
-                if (modal) {
-                    modal.style.display = "none";
+    function loadMuteState() {
+        const storedMuteState = localStorage.getItem(`chat_${currentChatId}_muted`);
+        const mutedIcon = document.querySelector(`.sidebar li[data-chat-id="${currentChatId}"] .muted-icon`);
+        const muteChatLink = document.getElementById('muteChatLink');
+        const muteText = document.getElementById('muteText');
+
+        if (storedMuteState !== null) {
+            isMuted = (storedMuteState === 'true');
+
+            if (muteChatLink && muteText && mutedIcon) {
+                if (isMuted) {
+                    muteText.textContent = "Включить уведомления";
+                    mutedIcon.style.display = 'inline'; // Показываем иконку
+                } else {
+                    muteText.textContent = "Заглушить уведомления";
+                    mutedIcon.style.display = 'none'; // Скрываем иконку
                 }
-            });
-        });
+            }
+        }
+    }
 
-        // Добавим закрытие по клику вне окна
-        window.addEventListener('click', function(event) {
-            if (event.target === chatInfoModal || event.target === profileModal || event.target === settingsModal || event.target === featuresModal || event.target === createChatModal) {
-               chatInfoModal.style.display = "none";
-               profileModal.style.display = "none";
-               settingsModal.style.display = "none";
-               featuresModal.style.display = "none";
-               createChatModal.style.display = "none";
+    function populateEmojiPanel() {
+        const emojiGrid = document.querySelector('.emoji-grid');
+        emojis.forEach(emoji => {
+            const emojiSpan = document.createElement('span');
+            emojiSpan.textContent = emoji;
+            emojiSpan.addEventListener('click', () => {
+                messageInput.value += emoji; // Добавляем смайлик в input
+                messageInput.focus();
+            });
+            emojiGrid.appendChild(emojiSpan);
+        });
+    }
+
+    // Обработчик клика по кнопке смайликов
+    const emojiButton = document.getElementById('emojiButton');
+    const emojiPanel = document.getElementById('emojiPanel');
+
+    if (emojiButton) {
+        emojiButton.addEventListener('click', () => {
+            if (emojiPanel.style.display === 'none') {
+                emojiPanel.style.display = 'block';
+                // Закрываем панель по клику вне её области
+                document.addEventListener('click', closeEmojiPanelOnClickOutside);
+            } else {
+                emojiPanel.style.display = 'none';
+                document.removeEventListener('click', closeEmojiPanelOnClickOutside);
             }
         });
+    }
+    // Функция для закрытия панели смайликов по клику вне её области
+    function closeEmojiPanelOnClickOutside(event) {
+        if (!emojiPanel.contains(event.target) && event.target !== emojiButton) {
+            emojiPanel.style.display = 'none';
+            document.removeEventListener('click', closeEmojiPanelOnClickOutside);
+        }
+    }
+
+
+    // Вызываем функцию для заполнения панели при загрузке страницы
+    populateEmojiPanel();
+    loadMuteState();
+
+    closeModalButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            const modal = button.closest('.modal');
+            if (modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+
+    window.addEventListener('click', function(event) {
+        if (event.target === chatInfoModal || event.target === profileModal || event.target === settingsModal || event.target === featuresModal || event.target === createChatModal) {
+            chatInfoModal.style.display = "none";
+            profileModal.style.display = "none";
+            settingsModal.style.display = "none";
+            featuresModal.style.display = "none";
+            createChatModal.style.display = "none";
+        }
+    });
 });
+
+// v.0.2
