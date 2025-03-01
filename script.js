@@ -178,6 +178,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatInfoContent = document.getElementById('chatInfoContent');
     const closeModalButtons = document.querySelectorAll('.close');
 
+    // Обработчики для звонков и видеозвонков
+    const callButton = document.getElementById('callButton');
+    const videoCallButton = document.getElementById('videoCallButton');
+    const callModal = document.getElementById('callModal');
+    const videoCallModal = document.getElementById('videoCallModal');
+    const endCallButton = document.getElementById('endCallButton');
+    const endVideoCallButton = document.getElementById('endVideoCallButton');
+
+    if (callButton && callModal && endCallButton) {
+        callButton.addEventListener('click', function() {
+            callModal.style.display = "block";
+        });
+
+        endCallButton.addEventListener('click', function() {
+            callModal.style.display = "none";
+        });
+    }
+
+    if (videoCallButton && videoCallModal && endVideoCallButton) {
+        videoCallButton.addEventListener('click', function() {
+            videoCallModal.style.display = "block";
+        });
+
+        endVideoCallButton.addEventListener('click', function() {
+            videoCallModal.style.display = "none";
+        });
+    }
+
     if (profileMenu && profileModal && settingsModal && featuresModal) {
         profileMenu.addEventListener('click', function(event) {
             const target = event.target;
@@ -306,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (currentChatId === 1) {
             chatInfo = "<p><strong>Название:</strong> Чат 1</p><p><strong>Тип:</strong> Личный чат</p><p><strong>Участники:</strong> Тёма Клочков, Пользователь 1</p>";
         } else if (currentChatId === 2) {
-            chatInfo = "<p><strong>Название:</strong> Чат 2</p><p><strong>Тип:</strong> Личный чат</p><p><strong>Участники:</strong> Тёма Клочков, Пользователь 2</p>";
+            chatInfo = "<p><strong>Название:</strong> Чат 2</p><p><strong>Тип:</strong> Личный чат</p><p><strong>Участники:</strong> Тёма Клочков, Пользователь 3.  Звонки и видеозвонки можно реализовать, используя WebRTC API.</p>";
         } else if (currentChatId === 3) {
             chatInfo = "<p><strong>Название:</strong> Чат 3</p><p><strong>Тип:</strong> Личный чат</p><p><strong>Участники:</strong> Тёма Клочков, Пользователь 3</p>";
         } else {
@@ -414,6 +442,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function handleLogout() {
+        // Здесь можно добавить логику выхода (например, очистка данных пользователя, удаление токенов)
+        // Сейчас просто перезагружаем страницу.
+        window.location.reload(); // Перезагружаем страницу
+    }
+
+
+    const logoutButton = document.getElementById('logoutButton');
+
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Предотвращаем переход по ссылке (если это ссылка)
+            handleLogout();
+        });
+    }
+
+
 
     // Вызываем функцию для заполнения панели при загрузке страницы
     populateEmojiPanel();
@@ -429,14 +474,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     window.addEventListener('click', function(event) {
-        if (event.target === chatInfoModal || event.target === profileModal || event.target === settingsModal || event.target === featuresModal || event.target === createChatModal) {
+        if (event.target === chatInfoModal || event.target === profileModal || event.target === settingsModal || event.target === featuresModal || event.target === createChatModal || event.target === callModal || event.target === videoCallModal) {
             chatInfoModal.style.display = "none";
             profileModal.style.display = "none";
             settingsModal.style.display = "none";
             featuresModal.style.display = "none";
             createChatModal.style.display = "none";
+            callModal.style.display = "none";
+            videoCallModal.style.display = "none";
         }
     });
 });
 
-// v.0.2
+// v. 0.2
