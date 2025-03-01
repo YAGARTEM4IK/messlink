@@ -12,3 +12,5 @@ def serve_static(path):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# v. 0.1
