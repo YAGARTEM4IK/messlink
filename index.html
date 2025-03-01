@@ -37,13 +37,14 @@
                     <span id="chatName">Чат 1</span>
                 </div>
                 <div class="chat-actions">
-                    <i class="fas fa-phone"></i>
-                    <i class="fas fa-video"></i>
+                    <i class="fas fa-phone" id="callButton"></i>
+                    <i class="fas fa-video" id="videoCallButton"></i>
                     <div class="dropdown">
                         <i class="fas fa-ellipsis-vertical dropdown-toggle"></i>
                         <div class="dropdown-menu">
                             <a href="#" id="chatInfoLink">Информация о чате</a>
                             <a href="#" id="muteChatLink">
+                                <i class="fas fa-bell" id="muteIcon"></i>
                                 <span id="muteText">Заглушить уведомления</span>
                             </a>
                             <a href="#" id="deleteChatLink">Удалить чат</a>
@@ -75,7 +76,7 @@
                 <li><a href="#"><i class="fas fa-user"></i> Основные данные</a></li>
                 <li><a href="#"><i class="fas fa-cog"></i> Настройки</a></li>
                 <li><a href="#"><i class="fas fa-star"></i> Возможности</a></li>
-                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Выйти</a></li>
+                <li><a href="#" id="logoutButton"><i class="fas fa-sign-out-alt"></i> Выйти</a></li>
             </ul>
         </div>
 
@@ -165,8 +166,26 @@
         </div>
     </div>
 
+    <div id="callModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Звонок</h2>
+            <p>Имитация звонка...</p>
+            <button id="endCallButton">Завершить звонок</button>
+        </div>
+    </div>
+
+    <div id="videoCallModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Видеозвонок</h2>
+            <p>Имитация видеозвонка...</p>
+            <button id="endVideoCallButton">Завершить видеозвонок</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
 
-    <!-- v.0.2 -->
+    <!-- v.0.3 -->
